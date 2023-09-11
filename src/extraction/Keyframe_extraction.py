@@ -2,7 +2,7 @@ import pickle
 import cv2
 import numpy as np
 from extraction.Kmeans_improvment import kmeans_silhouette
-from Scripts.save_keyframe import save_frames
+from scripts.save_keyframe import save_frames
 from extraction.Redundancy import redundancy
 
 
