@@ -25,6 +25,7 @@ def scen_keyframe_extraction(scenes_path, features_path, video_path, save_path, 
     print(features.shape)
     # Clustering at each shot to obtain keyframe sequence numbers
     keyframe_index = []
+    index_flag = True
     for i in range(0, len(number_list) - 1, 2):
         start = number_list[i]
         end = number_list[i + 1]
@@ -32,6 +33,10 @@ def scen_keyframe_extraction(scenes_path, features_path, video_path, save_path, 
         sub_features = features[start:end]
         print(sub_features.shape)
         best_labels, best_centers, k, index = kmeans_silhouette(sub_features)
+
+        if index is None:
+            index_flag = False
+            break
         # print(index)
         final_index = [x + start for x in index]
         # final_index.sort()
@@ -42,9 +47,9 @@ def scen_keyframe_extraction(scenes_path, features_path, video_path, save_path, 
         keyframe_index += final_index
     keyframe_index.sort()
     print("final_index：" + str(keyframe_index))
-
-    # save keyframe
-    save_frames(keyframe_index, video_path, save_path, folder_path)
+    if index_flag:
+        # save keyframe
+        save_frames(keyframe_index, video_path, save_path, folder_path)
 
 
 
