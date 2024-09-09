@@ -4,3 +4,4 @@ pkl
 **/.ipynb_checkpoints
 __pycache__
 .ipynb_checkpoints
+src/model_rife

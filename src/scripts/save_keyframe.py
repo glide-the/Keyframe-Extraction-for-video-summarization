@@ -26,6 +26,7 @@ def save_frames(keyframe_indexes, video_path, save_path, folder_name):
         if current_index in keyframe_indexes:
             file_name = '{}.jpg'.format(current_index)
             file_path = os.path.join(folder_path, file_name)
+            print(f'save_frames:{file_path}')
             cv2.imwrite(file_path, frame)
 
         current_index += 1

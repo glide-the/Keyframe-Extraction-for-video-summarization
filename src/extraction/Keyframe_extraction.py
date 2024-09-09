@@ -46,11 +46,13 @@ def scen_keyframe_extraction(scenes_path, features_path, video_path, save_path, 
         # print(final_index)
         keyframe_index += final_index
     keyframe_index.sort()
+    if not index_flag:
+        keyframe_index.append(0)
+    
     print("final_index：" + str(keyframe_index))
-    if index_flag:
-        # save keyframe
-        save_frames(keyframe_index, video_path, save_path, folder_path)
-
+    # save keyframe
+    save_frames(keyframe_index, video_path, save_path, folder_path)
+    
 
 
 
