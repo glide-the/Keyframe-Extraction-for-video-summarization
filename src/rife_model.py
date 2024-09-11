@@ -24,8 +24,6 @@ def pad_image(img, scale):
 
 
 def make_inference(model, I0, I1, upscale_amount, n):
-    print(I0.dtype)
-    print(I0.dtype)
     middle = model.inference(I0, I1, upscale_amount)
     if n == 1:
         return [middle]
