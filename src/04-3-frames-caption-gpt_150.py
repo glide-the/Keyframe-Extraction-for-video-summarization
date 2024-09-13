@@ -156,8 +156,8 @@ def scenes_timeline_caption(df, features_folder_path,caption_method, features_ke
         prompt = "Provide a detailed description of the details and content contained in the image, and generate a short prompt that can be used for image generation tasks in Stable Diffusion,you should only return prompt，itself without any additional information."
     elif caption_method == 'long_prompt':
         prompt = """Follow these steps to create a Midjourney-style long prompt for generating high-quality images of Tom and Jerry cartoon scenes:
-1. The prompt should include rich details, vivid scenes, and composition information, capturing the important elements that make up the scenes in the Tom and Jerry cartoon.
-2. You can appropriately add some details to enhance the vividness and richness of the content, while ensuring that the long prompt does not exceed 256 tokens; you should only return the prompt itself without any additional information."""
+            1. The prompt should include rich details, vivid scenes, and composition information, capturing the important elements that make up the scenes in the Tom and Jerry cartoon.
+            2. You can appropriately add some details to enhance the vividness and richness of the content, while ensuring that the long prompt does not exceed 256 tokens; you should only return the prompt itself without any additional information."""
     else:
         prompt = "Describe this image in detail, focusing on the main elements, colors, and overall composition. After the description, generate a list of relevant tags that could be used for image generation task with Stable Diffusion."
 
