@@ -58,7 +58,7 @@ def pad_video_of_np(samples, w, h):
     return image_pil
 
 
-def split_video(video_path, output_dir, start_time, end_time, features_frame, w=720 , h=960 ,chunk_duration=4):
+def split_video(video_path, output_dir, start_time, end_time, features_frame, w=540 , h=360 ,chunk_duration=4):
     # Open the video file
     video_capture = cv2.VideoCapture(video_path)
     fps = video_capture.get(cv2.CAP_PROP_FPS)  # Get the frames per second
