@@ -22,7 +22,7 @@ torch.set_grad_enabled(False)
 if torch.cuda.is_available():
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = True
-    torch.set_default_tensor_type(torch.cuda.HalfTensor)
+    torch.set_default_tensor_type(torch.cuda.FloatTensor)
 
 frame_interpolation_model = load_rife_model("model_rife")
 

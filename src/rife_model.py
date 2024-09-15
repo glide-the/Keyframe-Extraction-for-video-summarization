@@ -41,6 +41,7 @@ def ssim_interpolation_rife(model, samples, exp=1, upscale_amount=1, output_devi
     print(f"samples dtype:{samples.dtype}")
     print(f"samples shape:{samples.shape}")
     output = []
+    pbar = utils.ProgressBar(samples.shape[0], desc="RIFE inference")
     # [f, c, h, w]
     for b in range(samples.shape[0]):
         frame = samples[b : b + 1]
@@ -78,7 +79,7 @@ def ssim_interpolation_rife(model, samples, exp=1, upscale_amount=1, output_devi
             # print(f'I1[0] unpadded shape:{I1.shape}') 
             I1_small = F.interpolate(I1, (32, 32), mode="bilinear", align_corners=False)
             ssim = ssim_matlab(I0_small[:, :3], I1_small[:, :3])
-            frame = I1[padding[0]:, padding[2]:,  padding[3]:,padding[1]:]
+            frame = I1[padding[0]:, padding[2]:,  :-padding[3],padding[1]:]
 
         tmp_output = []
         if ssim < 0.2:
@@ -89,13 +90,16 @@ def ssim_interpolation_rife(model, samples, exp=1, upscale_amount=1, output_devi
             tmp_output = make_inference(model, I0, I1, upscale_amount, 2**exp - 1) if exp else []
 
         frame, _ = pad_image(frame, upscale_amount)
-        print(f'frame shape:{frame.shape}')
-        print(f'tmp_output[0] shape:{tmp_output[0].shape}')
-        tmp_output = [frame] + tmp_output
- 
-        for i, frame in enumerate(tmp_output): 
-            frame = F.interpolate(frame, size=(h, w))
-            output.append(frame.to(output_device))
+        # print(f'frame shape:{frame.shape}')
+
+        frame = F.interpolate(frame, size=(h, w))
+        output.append(frame.to(output_device))
+        for i, tmp_frame in enumerate(tmp_output): 
+
+            # tmp_frame, _ = pad_image(tmp_frame, upscale_amount)
+            tmp_frame = F.interpolate(tmp_frame, size=(h, w))
+            output.append(tmp_frame.to(output_device))
+        pbar.update(1)
     return output
 
 
@@ -152,7 +156,6 @@ def rife_inference_with_path(model, video_path):
 
 
 def rife_inference_with_latents(model, latents):
-    pbar = utils.ProgressBar(latents.shape[1], desc="RIFE inference")
     rife_results = []
     latents = latents.to(device)
     for i in range(latents.size(0)):
@@ -170,5 +173,5 @@ if __name__ == "__main__":
     snapshot_download(repo_id="AlexWortega/RIFE", local_dir="model_rife")
     model = load_rife_model("model_rife")
  
-    video_path = rife_inference_with_path(model, "/mnt/ceph/develop/jiawei/CogVideo/sat/configs/outputs/1_In_the_heart_of_a_bustling_city,_a_young_woman_with_long,_flowing_brown_hair_and_a_radiant_smile_stands_out._She's_donne/0/000000.mp4")
+    video_path = rife_inference_with_path(model, "/mnt/ceph/develop/jiawei/CogVideo/output/chunk_3710_1.mp4")
     print(video_path)

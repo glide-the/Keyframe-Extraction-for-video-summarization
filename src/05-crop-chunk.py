@@ -71,7 +71,7 @@ def split_video(video_path, output_dir, start_time, end_time, features_frame, w=
     video_capture.set(cv2.CAP_PROP_POS_FRAMES, start_frame)  # Set video position to start frame
 
     current_frame = start_frame
-    chunk_index = 1
+    chunk_index = 0
 
     while current_frame <= end_frame:
         chunk_frames = []
