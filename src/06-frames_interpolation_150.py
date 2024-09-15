@@ -8,7 +8,7 @@ from diffusers.utils import export_to_video
 import math
 
 import os
-  
+import shutil
 import cv2
 import numpy as np
 import utils
