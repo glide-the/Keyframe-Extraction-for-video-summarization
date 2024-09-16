@@ -80,10 +80,10 @@ def load_file_by_extension(file_dir, extension):
                 L.append(file) 
         return L 
 
+
 def rife_video_with_chunk(root_path, video_source):
     save_path = f'{root_path}/{video_source}/' 
- 
-    scene_csv_path=f'{save_path}/scene/{video_source}_scene_keyframe.csv'
+  
     videos_output_dir = f'{save_path}/scene_chunks/videos'
     labels_output_dir = f'{save_path}/scene_chunks/labels'
     videos_files = load_file_by_extension(videos_output_dir, 'mp4')
@@ -92,13 +92,15 @@ def rife_video_with_chunk(root_path, video_source):
     print(f"load videos_files:{videos_files}")
     for i, filename in enumerate(videos_files):
         video_path = f'{videos_output_dir}/{filename}'
-        export_video_path = f'{videos_output_dir}/rife_{filename}'
+        export_video_path = f'{videos_output_dir}_rife/{filename}'
+        os.makedirs(os.path.dirname(export_video_path), exist_ok=True)
         rile_with_path(video_path,export_video_path)
     
 
     for i, lable_filename in enumerate(labels_files):
-        lable_path = f'{videos_output_dir}/{lable_filename}'
-        export_lable_path = f'{videos_output_dir}/rife_{lable_filename}'
+        lable_path = f'{labels_output_dir}/{lable_filename}'
+        export_lable_path = f'{labels_output_dir}_rife/{lable_filename}'
+        os.makedirs(os.path.dirname(export_lable_path), exist_ok=True)
         shutil.copy(lable_path, export_lable_path)
 
     
