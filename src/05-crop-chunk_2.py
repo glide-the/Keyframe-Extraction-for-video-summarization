@@ -253,17 +253,16 @@ def loadcsv_scene_chunk(scene_csv_path, video_path, videos_output_dir, labels_ou
     new_df['first_frame_generated_text'] = None
     new_df['last_frame_generated_text'] = None
     new_df['caption_summary_text'] = None
-    # Iterate over each row in the table
-    for _, row in df.iterrows():
+ 
+    new_df = pd.DataFrame()  # 确保 new_df 已被初始化
+
+    for _, row in df.iterrows(): 
+ 
         start_time = row['开始时间']
         end_time = row['结束时间']
         features_caption = row['特征描述']
-        features_frame = int(row['特征帧'])
-        # 将行转换为 DataFrame 并追加到 new_df
-        new_df = pd.concat([new_df, pd.DataFrame([row])], ignore_index=True)
-
-        # 创建一个新的 DataFrame 来存储冗余行
-        expanded_df = pd.DataFrame(columns=new_df.columns)
+        features_frame = int(row['特征帧']) 
+ 
         # 将开始时间和结束时间解析为时间对象
         start_time_obj = datetime.datetime.strptime(start_time, "%H:%M:%S,%f")
         end_time_obj = datetime.datetime.strptime(end_time, "%H:%M:%S,%f")
@@ -277,22 +276,29 @@ def loadcsv_scene_chunk(scene_csv_path, video_path, videos_output_dir, labels_ou
         end_seconds = end_seconds-1
         # Split the video for each start and end time
         output_files = split_video(video_path, videos_output_dir, start_seconds, end_seconds,features_frame)
+        print(f"output_files:{output_files}")
         for index, path in enumerate(output_files):
+            # 在内层循环中，复制当前行的数据
+            new_row = row.copy()
             first_frame_generated_text, last_frame_generated_text, caption_summary_text = caption_chunk_gpt(path, features_caption)
+             
+            # 更新新行的数据
+            new_row['chunk_index'] = f'chunk_{features_frame}_{index}'
+            new_row['chunk_path'] = path
+            new_row['first_frame_generated_text'] = first_frame_generated_text
+            new_row['last_frame_generated_text'] = last_frame_generated_text
+            new_row['caption_summary_text'] = caption_summary_text
             
-            # Update the corresponding row in new_df with the generated text values
-            new_df.at[new_df.index[-1], 'chunk_index'] = f'chunk_{features_frame}_{index}'
-            new_df.at[new_df.index[-1], 'chunk_path'] = path
-            new_df.at[new_df.index[-1], 'first_frame_generated_text'] = first_frame_generated_text
-            new_df.at[new_df.index[-1], 'last_frame_generated_text'] = last_frame_generated_text
-            new_df.at[new_df.index[-1], 'caption_summary_text'] = caption_summary_text
-            
+            # 将新行转换为 DataFrame 并追加到 new_df
+            new_df = pd.concat([new_df, pd.DataFrame([new_row])], ignore_index=True)
             lable_file = os.path.join(labels_output_dir, f'chunk_{features_frame}_{index}.txt')
             # Open the file in write mode
             with open(lable_file, 'w') as file: 
                 file.write(caption_summary_text)
 
     return new_df
+
+    
 
 
 

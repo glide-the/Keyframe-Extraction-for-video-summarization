@@ -228,7 +228,7 @@ def check_video_caption_exists_role(root_path, video_source):
 
 import os
 
-root_path = '/mnt/ceph/develop/jiawei/lora_dataset/speech_data/猫和老鼠150/'
+root_path = '/mnt/ceph/develop/jiawei/lora_dataset/speech_data/B站/'
 for root, dirs, files in os.walk(root_path):
     # 如果你只想获取下一层的子目录，可以在这里筛选
     if root == root_path:
